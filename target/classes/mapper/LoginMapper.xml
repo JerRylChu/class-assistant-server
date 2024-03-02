@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.LoginMapper">
+    <insert id="register" parameterType="user">
+       insert into assistant_user (password, create_time, nick_name, phone_number, school,head_icon_url,major)
+       values (#{user.password}, #{user.createTime}, #{user.nickName}, #{user.phoneNumber}, #{user.school},#{user.headIconUrl},#{user.major})
+    </insert>
+    <select id="getUserByPhoneNumber" parameterType="String" resultType="user">
+        select assistant_user.*, tb_special.name majorName from tb_special, assistant_user where assistant_user.phone_number = #{phoneNumber} and assistant_user.major = tb_special.id;
+    </select>
+    <select id="getUserInfo" parameterType="Integer" resultType="user">
+        select * from assistant_user where id = #{id};
+    </select>
+    <select id="getArticleCount" resultType="Integer" parameterType="Integer">
+        select count(id) from article where user_id = #{id} and del = 0;
+    </select>
+    <select id="getStars" parameterType="Integer" resultType="Integer">
+        select count(stars.user_id) from article,stars where article.user_id = #{id} and stars.article_id = article.id
+    </select>
+    <select id="getFollowCount" parameterType="Integer" resultType="Integer">
+        select count(follwed_user_id) from follow where follwed_user_id = #{id};
+    </select>
+    <update id="updatePwd" parameterType="user">
+        update assistant_user set password = #{password} where id = #{id}
+    </update>
+    <select id="getImgPath" resultType="String">
+        select head_icon_url from assistant_user
+    </select>
+</mapper>

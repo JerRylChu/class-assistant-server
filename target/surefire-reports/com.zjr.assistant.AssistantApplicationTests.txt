@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.zjr.assistant.AssistantApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 10.1 s <<< FAILURE! - in com.zjr.assistant.AssistantApplicationTests
+testPath  Time elapsed: 0.123 s  <<< ERROR!
+java.lang.ArrayIndexOutOfBoundsException: 6
+	at com.zjr.assistant.AssistantApplicationTests.testPath(AssistantApplicationTests.java:43)
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.CollectMapper">
+    <select id="isCollect" parameterType="java.util.Map" resultType="Integer">
+        select count(*) from collect where user_id = #{userId} and article_id = #{articleId}
+    </select>
+    <insert id="addCollect" parameterType="java.util.Map">
+        insert into collect (user_id, article_id) VALUES (#{userId}, #{articleId})
+    </insert>
+    <delete id="delCollect" parameterType="java.util.Map">
+        delete from collect where user_id = #{userId} and article_id = #{articleId}
+    </delete>
+    <select id="getCollectByUserId" parameterType="article" resultType="article">
+        select article.* from collect, article where collect.user_id = #{userId} and article.id = collect.article_id
+        <if test="title != null and title != ''">
+            and title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="major != null and major != 0">
+            and major = #{major}
+        </if>
+    </select>
+</mapper>

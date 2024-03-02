@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.FollowMapper">
+    <select id="isCare" parameterType="java.util.Map" resultType="Integer">
+        select count(*) from follow where follow_user_id = #{follow} and follwed_user_id = #{followed}
+    </select>
+    <insert id="addCare" parameterType="java.util.Map">
+        insert into follow (follow_user_id, follwed_user_id) VALUES (#{follow},#{followed})
+    </insert>
+    <delete id="delCare" parameterType="java.util.Map">
+        delete from follow where follow_user_id = #{follow} and follwed_user_id = #{followed}
+    </delete>
+    <select id="getCareAuthor" parameterType="Integer" resultType="user">
+        select u.nick_name, u.head_icon_url, u.id
+        from follow, assistant_user u
+        where follow.follow_user_id = #{id} and u.id = follow.follwed_user_id
+    </select>
+</mapper>

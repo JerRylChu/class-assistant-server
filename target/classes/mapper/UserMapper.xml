@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.UserMapper">
+    <update id="updateSignature" parameterType="user">
+        update assistant_user set signature = #{signature} where id = #{id}
+    </update>
+    <update id="updateAvatar" parameterType="user">
+        update assistant_user set head_icon_url = #{headIconUrl} where id = #{id}
+    </update>
+</mapper>

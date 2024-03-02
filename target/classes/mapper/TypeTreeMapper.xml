@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.TypeTreeMapper">
+    <resultMap id="typeTreeMap" type="typeTree">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <collection property="typeTrees" ofType="typeTree" select="findTypeByPid" column="{id=id,name=name}">
+            <id property="id" column="id" />
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+    <select id="getTypeTree" resultMap="typeTreeMap" parameterType="int">
+        select id,name from photo_menu where parent = 0 and user_id = #{id};
+    </select>
+    <select id="findTypeByPid" resultMap="typeTreeMap">
+        select id, name from photo_menu where parent = #{id};
+    </select>
+    <insert id="addType" parameterType="typeTree">
+        insert into photo_menu (user_id, name, parent, create_time) values (#{userId}, #{name}, #{parent}, #{createTime});
+    </insert>
+</mapper>

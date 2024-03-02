@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.SpecialMapper">
+    <resultMap id="specialMap" type="special">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <collection property="children" ofType="special">
+            <id property="id" column="sid" />
+            <result property="name" column="sname"/>
+        </collection>
+    </resultMap>
+
+    <select id="getSpecial" resultMap="specialMap">
+        select * from
+            (select s.id, s.name, sp.id sid, sp.name sname from tb_special s right join tb_special sp on s.id = sp.parent_id) as a
+        where a.id is not null;
+    </select>
+</mapper>

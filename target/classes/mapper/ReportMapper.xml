@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.ReportMapper">
+    <insert id="reportIllegal" parameterType="report">
+        insert into report (user_id, article_id, description) values (#{userId},#{articleId},#{description})
+    </insert>
+    <select id="hasReported" parameterType="report" resultType="Integer">
+        select count(*) from report where user_id = #{userId} and article_id = #{articleId};
+    </select>
+</mapper>

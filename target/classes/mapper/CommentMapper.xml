@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.CommentMapper">
+    <resultMap id="commentTree" type="comment">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="article_id" property="articleId"/>
+        <result column="comment" property="comment"/>
+        <result column="parent" property="parent"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="children" ofType="comment" select="findByParentId" column="id">
+            <id column="id" property="id"/>
+            <result column="user_id" property="userId"/>
+            <result column="nick_name" property="nickName"/>
+            <result column="article_id" property="articleId"/>
+            <result column="comment" property="comment"/>
+            <result column="parent" property="parent"/>
+            <result column="create_time" property="createTime"/>
+        </collection>
+    </resultMap>
+    <insert id="addComment" parameterType="comment">
+        insert into comment (user_id, article_id, comment, parent, create_time)
+        values (#{userId},#{articleId},#{comment},#{parent},#{createTime})
+    </insert>
+    <select id="getCommentsByArticleId" parameterType="Integer" resultMap="commentTree">
+        select comment.*, u.nick_name
+        from comment, assistant_user u
+        where article_id = #{id} and parent = 0 and u.id = comment.user_id
+        order by comment.create_time desc
+    </select>
+    <select id="findByParentId" resultMap="commentTree">
+        select comment.*, u.nick_name
+        from comment, assistant_user u
+        where parent = #{id} and u.id = comment.user_id
+        order by comment.create_time desc
+    </select>
+    <delete id="delComment" parameterType="Integer">
+        delete from comment where id = #{id} or parent = #{id}
+    </delete>
+</mapper>

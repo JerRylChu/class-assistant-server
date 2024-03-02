@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.ArticleMapper">
+    <insert id="add" parameterType="article" useGeneratedKeys="true" keyProperty="id">
+        insert into article (user_id, title, description, article_content, create_time, major)
+        values (#{userId}, #{title}, #{description}, #{articleContent}, #{createTime}, #{major})
+    </insert>
+    <select id="getArticleById" parameterType="Integer" resultType="article">
+        select article.*, tb_special.name majorName, assistant_user.nick_name nickName from article, tb_special, assistant_user
+        where del = 0 and tb_special.id = article.major and assistant_user.id = article.user_id
+        <if test="id != 0">
+            and article.id = #{id}
+        </if>
+    </select>
+    <select id="getStars" parameterType="Integer" resultType="Integer">
+        select count(*) from stars where article_id = #{id}
+    </select>
+    <select id="getReads" parameterType="Integer" resultType="Integer">
+        select count(*) from trail where article_id = #{id}
+    </select>
+    <select id="getComments" parameterType="Integer" resultType="Integer">
+        select count(*) from comment where article_id = #{id}
+    </select>
+    <select id="getArticlesByUserId" parameterType="article" resultType="article">
+        select * from article where user_id = #{userId} and del = 0
+        <if test="major != null and major != 0">
+            and major = #{major}
+        </if>
+        <if test="title != null and title != ''">
+            and title like CONCAT('%',#{title},'%')
+        </if>
+        order by create_time desc
+    </select>
+    <select id="getRecommendArticles" parameterType="String" resultType="article">
+        select * from article where del = 0
+        <if test="pattern != null and pattern != ''">
+            and title like CONCAT('%',#{pattern},'%')
+        </if>
+        order by create_time desc
+    </select>
+    <update id="updateArticleById" parameterType="article">
+        update article
+        set title = #{title},description = #{description},article_content = #{articleContent},major=#{major}
+        where id = #{id}
+    </update>
+    <update id="delArticleById" parameterType="Integer">
+        update article set del = 1 where id = #{id}
+    </update>
+    <select id="getArticleStatistic" parameterType="Integer" resultType="articleType">
+        SELECT COUNT(article.id) value, tb_special.name
+        FROM article,tb_special
+        where article.major = tb_special.id and article.user_id = #{id} and del = 0
+        GROUP BY article.major
+    </select>
+    <select id="isUserOwnArticle" parameterType="trail" resultType="Integer">
+        select count(id) from article where id = #{articleId} and user_id = #{userId};
+    </select>
+    <insert id="addTrail" parameterType="trail">
+        insert into trail (user_id, article_id, create_time) VALUES (#{userId},#{articleId},#{createTime})
+    </insert>
+    <select id="getSpecialByUserId" resultType="special" parameterType="Integer">
+        select tb_special.id, tb_special.name from article,tb_special
+        where article.user_id = #{id} and article.major = tb_special.id group by article.major
+    </select>
+    <select id="getArticlesByList" parameterType="List" resultType="article">
+        select * from article where id in
+        <foreach collection="list" separator="," open="(" close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

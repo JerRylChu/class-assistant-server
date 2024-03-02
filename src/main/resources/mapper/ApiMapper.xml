@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zjr.assistant.mapper.ApiMapper">
+    <delete id="delTerms" parameterType="Integer">
+        delete from term where user_id = #{id}
+    </delete>
+    <insert id="uploadTerm" parameterType="java.util.List">
+        insert into term (term_name, create_date, user_id, selected, course_json) values
+        <foreach collection="terms" item="item" index="index" separator=",">
+            (#{item.termName}, #{item.createDate}, #{item.userId}, #{item.selected}, #{item.courseJson})
+        </foreach>
+    </insert>
+    <select id="getTerms" parameterType="Integer" resultType="term">
+        select * from term where user_id = #{id}
+    </select>
+<!--    <delete id="delCourses" parameterType="Integer">-->
+    <!--        delete course from course, term where  term.user_id = #{id} and course.term = term.id;-->
+    <!--    </delete>-->
+    <!--    <insert id="uploadCourse" parameterType="java.util.List">-->
+    <!--        insert into course (term, name, room, teacher, week_json, start, step, day, color_random) VALUES-->
+    <!--        <foreach collection="courses" item="item" index="index" separator=",">-->
+    <!--            (#{item.term},#{item.name},#{item.room},#{item.teacher},#{item.weekJson},#{item.start},#{item.step},#{item.day},#{item.colorRandom})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
+    <!--    <select id="getCourses" parameterType="Integer" resultType="course">-->
+    <!--        select course.* from course, term where course.term = term.id and term.user_id = #{id}-->
+    <!--    </select>-->
+    <delete id="delToolBox" parameterType="Integer">
+        delete from tool_box where user_id = #{id}
+    </delete>
+    <insert id="uploadToolBox" parameterType="java.util.List">
+        insert into tool_box (user_id, kind_id, name, url, headicon_address) values
+        <foreach collection="toolBoxes" item="item" index="index" separator=",">
+            (#{userId}, #{kindId}, #{name}, #{url}, #{headiconAddress})
+        </foreach>
+    </insert>
+    <select id="getToolBoxes" parameterType="Integer" resultType="toolBox">
+        select * from tool_box where user_id = #{id};
+    </select>
+    <delete id="delCounter" parameterType="Integer">
+        delete from counter where user_id = #{id};
+    </delete>
+    <insert id="uploadCounter" parameterType="java.util.List">
+        insert into counter (user_id, counter_name, date_string, people, color, color_iD, flag_num, rrule, addTime, focus_num, list_focus_json) VALUES
+        <foreach collection="counters" item="item" separator="," index="index">
+            (#{userId},#{counterName},#{dateString},#{people},#{color},#{colorID},#{flagNum},#{rrule},#{addTime},#{focusNum},#{listFocusJson})
+        </foreach>
+    </insert>
+    <select id="getCounter" parameterType="Integer">
+        select * from counter where user_id = #{id}
+    </select>
+<!--    <delete id="delPhoto" parameterType="Integer">-->
+<!--        delete from -->
+<!--    </delete>-->
+    <delete id="delNotes" parameterType="Integer">
+        delete from note where user_id = #{id}
+    </delete>
+    <insert id="uploadNotes" parameterType="java.util.List">
+        insert into note (user_id, add_date, subject, content) values
+        <foreach collection="notes" item="item" index="index" separator=",">
+            (#{userId},#{addDate},#{subject},#{content})
+        </foreach>
+    </insert>
+    <select id="getNotes" parameterType="Integer" resultType="note">
+        select * from note where user_id = #{id}
+    </select>
+    <delete id="delSettings" parameterType="Integer">
+        delete from settings where user_id = #{userId}
+    </delete>
+    <insert id="uploadSettings" parameterType="settings">
+        insert into settings (user_id, settings) values (#{userId}, #{settings})
+    </insert>
+    <select id="getSettings" parameterType="Integer" resultType="String">
+        select settings from settings where user_id = #{id}
+    </select>
+    <insert id="uploadInfo" parameterType="mobileInfo">
+        insert into mobile_info (user_id, json_string) values (#{userId},#{jsonString})
+    </insert>
+    <select id="getInfoByUserId" parameterType="Integer" resultType="String">
+        select json_string from mobile_info where user_id = #{id}
+    </select>
+    <delete id="delInfo" parameterType="Integer">
+        delete from mobile_info where user_id = #{id}
+    </delete>
+</mapper>
